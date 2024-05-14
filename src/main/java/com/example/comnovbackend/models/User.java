@@ -1,10 +1,11 @@
 package com.example.comnovbackend.models;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
+import javax.persistence.*;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -13,34 +14,32 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter @Setter
     private Long id;
 
     @Column(nullable = false, unique = true)
-    @Getter @Setter
     private String username;
 
     @Column(nullable = false, unique = true)
-    @Getter @Setter
     private String email;
 
     @Column(nullable = false)
-    @Getter @Setter
     private String password;
 
-    @OneToMany(mappedBy = "user")
-    @Getter @Setter
-    private Set<PublishedBook> publishedBooks;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private Set<Book> books = new HashSet<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
-    @Getter @Setter
     private UserProfile userProfile;
 
     @ManyToOne
-    @JoinColumn(name = "role_id")
-    @Getter @Setter
+    @JoinColumn(name = "role_id") // Use this instead of @Column for foreign key specification
     private Role role;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date joinDate = new Date();
 
 
 

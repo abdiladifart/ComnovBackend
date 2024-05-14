@@ -1,8 +1,8 @@
 package com.example.comnovbackend.models;
-
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.*;
 
 import java.util.Date;
 
@@ -13,26 +13,20 @@ public class PublishedBook {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter @Setter
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @Getter @Setter
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
-    @Getter @Setter
     private Book book;
 
     @Column(name = "date", nullable = false)
-    @Getter @Setter
     private Date publishDate;
 
-    @Column(name = "description",nullable = false )
-    @Getter @Setter
+    @Column(name = "description", nullable = false)
     private String description;
-
 
 }

@@ -1,8 +1,11 @@
 package com.example.comnovbackend.models;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.*;
+import java.util.Date;
+
 
 @Entity
 @Table(name = "user_profiles")
@@ -27,5 +30,19 @@ public class UserProfile {
     @Getter @Setter
     private String bio;
 
+    private String email;
+    private String username;
+
+    @Getter @Setter
+    private Date joinDate;
+    public UserProfile(User user) {
+        this.email = user.getEmail();
+        this.username = user.getUsername();
+        this.joinDate = user.getJoinDate();
+    }
+
+    public UserProfile() {
+
+    }
 
 }

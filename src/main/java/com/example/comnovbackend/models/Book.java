@@ -1,13 +1,16 @@
 package com.example.comnovbackend.models;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "books")
@@ -16,41 +19,65 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter @Setter
     private Long id;
 
-    @Column(nullable = false)
-    @Getter @Setter
     private String title;
-
-    @Column(length = 5000)
-    @Getter @Setter
+    private String genre;
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "genre_id", nullable = false)
-    @Getter @Setter
-    private Genre genre;
+    @Lob
+    private byte[] cover;
 
-    @Getter @Setter
+    @Lob
+    private byte[] content;
+
     private String author;
-
-    @Getter @Setter
     private String publisher;
 
-    @Column(name = "publish_date",nullable = false)
-    @Getter @Setter
+    @Column(name = "publish_date", nullable = false)
     private Date publishDate;
 
-    @Column(name = "imageUrl",nullable = false)
-    @Getter @Setter
+    @Column(name = "imageUrl", nullable = false)
     private String imageUrl;
 
-
     @ManyToOne
-    @JoinColumn(name = "uploaded_by")
-    @Getter @Setter
-    private User uploadedBy;
+    @JsonBackReference
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
+    public Book() {}
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Book)) return false;
+        Book book = (Book) o;
+        return Objects.equals(id, book.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", genre='" + genre + '\'' +
+                ", description='" + description + '\'' +
+                ", cover=" + Arrays.toString(cover) +
+                ", content=" + Arrays.toString(content) +
+                '}';
+    }
+
+    public Book(String title, String genre, String description, byte[] cover, byte[] content, User user) {
+        this.title = title;
+        this.genre = genre;
+        this.description = description;
+        this.cover = cover;
+        this.content = content;
+        this.user = user;
+    }
 }
